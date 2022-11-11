@@ -5,10 +5,14 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 #output {
   padding: 20px;
   text-align: center;
+  max-width: 750px;
+  margin: auto;
+
+
 }
