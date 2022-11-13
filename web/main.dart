@@ -35,7 +35,7 @@ void updateTodos(Todo todo) {
   div.id = 'todo-$todoId';
   buttonRemove.text = 'X';
   buttonRemove.id = todo.id.toString();
-  buttonRemove.onClick.listen((event) => removeTodo(todo.id));
+  buttonRemove.onClick.listen((event) => removeTodo('todo-$todoId'));
   inputAddTask.onChange.listen((event) {
     todo.tasks.add(inputAddTask.value.toString());
     showTasks('todo-$todoId', inputAddTask.value.toString());
@@ -64,8 +64,8 @@ void showTasks(String todoId, String taskName) {
   tasksList.children.add(task);
 }
 
-void removeTodo(int todoId) {
-  uiList.children.removeAt(todoId - 1);
+void removeTodo(String todoId) {
+  uiList.children.removeWhere((element) => element.id == todoId);
 }
 
 void removeAlltodos(MouseEvent event) {
