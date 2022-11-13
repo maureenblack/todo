@@ -43,8 +43,8 @@ void updateTodos(Todo todo) {
     inputAddTask.value = '';
   });
 
-  span.text = todo.text ;
-
+  span.text = '$todoId $todo.text';
+   
   div.children.add(buttonRemove);
   div.children.add(span);
 
