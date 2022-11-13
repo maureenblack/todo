@@ -30,7 +30,8 @@ void updateTodos(Todo todo) {
   ButtonElement buttonRemove = ButtonElement();
   InputElement inputAddTask = InputElement();
   Element span = Element.span();
-  Element todoTasks = Element.ul();
+  HRElement separator = HRElement();
+  Element todoTasks = Element.div();
   String todoId = todo.id.toString();
   div.id = 'todo-$todoId';
   buttonRemove.text = 'X';
@@ -49,6 +50,7 @@ void updateTodos(Todo todo) {
 
   div.children.add(todoTasks);
   div.children.add(inputAddTask);
+  div.children.add(separator);
 
   // div.children.add(div);
   uiList.children.add(div);
@@ -58,8 +60,8 @@ void updateTodos(Todo todo) {
 void showTasks(String todoId, String taskName) {
   print(todoId);
   DivElement todoElement = querySelector('#$todoId') as DivElement;
-  UListElement tasksList = todoElement.children[2] as UListElement;
-  Element task = Element.li();
+  DivElement tasksList = todoElement.children[2] as DivElement;
+  Element task = Element.div();
   task.text = taskName;
   tasksList.children.add(task);
 }
