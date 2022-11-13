@@ -12,9 +12,8 @@ void main() async {
   todoInput.onChange.listen(addTodo);
 
   buttonClear.onClick.listen(removeAlltodos);
-
-  updateTodos(new Todo('nothing'));
-  updateTodos(new Todo('nothing two'));
+  // updateTodos(new Todo('nothing'));
+  // updateTodos(new Todo('nothing two'));
 }
 
 void addTodo(Event event) {
@@ -36,15 +35,15 @@ void updateTodos(Todo todo) {
   div.id = 'todo-$todoId';
   buttonRemove.text = 'X';
   buttonRemove.id = todo.id.toString();
-  buttonRemove.onClick.listen(removeTodo);
+  buttonRemove.onClick.listen((event) => removeTodo(todo.id));
   inputAddTask.onChange.listen((event) {
     todo.tasks.add(inputAddTask.value.toString());
     showTasks('todo-$todoId', inputAddTask.value.toString());
     inputAddTask.value = '';
   });
+  String todoText = todo.text;
+  span.text = '$todoId $todoText';
 
-  span.text = '$todoId $todo.text';
-   
   div.children.add(buttonRemove);
   div.children.add(span);
 
@@ -65,13 +64,15 @@ void showTasks(String todoId, String taskName) {
   tasksList.children.add(task);
 }
 
-void removeTodo(MouseEvent event) {}
+void removeTodo(int todoId) {
+  uiList.children.removeAt(todoId - 1);
+}
 
 void removeAlltodos(MouseEvent event) {
   uiList.children.clear();
   todoList.clear();
 
-  print(todoList);
+  // print(todoList);
 }
 
 class Todo {
