@@ -15,6 +15,10 @@ html, body {
   margin: auto;
   font-size: larger;
 }
+.hr{
+  background-color: brown;
+  
+}
 .container{
  background-color: black;
  color: aliceblue;

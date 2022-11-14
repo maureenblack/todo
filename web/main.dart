@@ -3,7 +3,6 @@ import 'dart:html';
 late InputElement todoInput;
 late DivElement uiList;
 late ButtonElement buttonClear;
-late ButtonElement buttonEdit;
 
 List<Todo> todoList = [];
 void main() async {
@@ -11,9 +10,7 @@ void main() async {
   uiList = querySelector('#todo-list') as DivElement;
   buttonClear = querySelector('#clear') as ButtonElement;
   todoInput.onChange.listen(addTodo);
-  buttonEdit = querySelector('#edit') as ButtonElement;
 
-  buttonEdit.onClick.listen(editTodo);
   buttonClear.onClick.listen(removeAlltodos);
   // updateTodos(new Todo('nothing'));
   // updateTodos(new Todo('nothing two'));
@@ -23,13 +20,6 @@ void addTodo(Event event) {
   Todo todo = Todo(todoInput.value.toString());
   todoList.add(todo);
   updateTodos(todo);
-  todoInput.value = '';
-}
-
-void editTodo(Event event) {
-  Todo todo = Todo(todoInput.value.toString());
-  todoList.add(todo);
-  editTodo(todo as Event);
   todoInput.value = '';
 }
 
@@ -43,14 +33,10 @@ void updateTodos(Todo todo) {
   HRElement separator = HRElement();
   Element todoTasks = Element.div();
   String todoId = todo.id.toString();
-  ButtonElement buttonEdit = ButtonElement();
   div.id = 'todo-$todoId';
   buttonRemove.text = 'X';
   buttonRemove.id = todo.id.toString();
   buttonRemove.onClick.listen((event) => removeTodo('todo-$todoId'));
-  buttonEdit.onChange.listen((event) => editTodo('todo-$todoId' as Event));
-  buttonEdit.id = todo.id.toString();
-  buttonEdit.text = 'Edit';
   inputAddTask.onChange.listen((event) {
     todo.tasks.add(inputAddTask.value.toString());
     showTasks('todo-$todoId', inputAddTask.value.toString());
@@ -61,7 +47,6 @@ void updateTodos(Todo todo) {
 
   div.children.add(buttonRemove);
   div.children.add(span);
-  div.children.add(buttonEdit);
 
   div.children.add(todoTasks);
   div.children.add(inputAddTask);
