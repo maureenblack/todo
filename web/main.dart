@@ -15,7 +15,7 @@ void main() async {
   datepicker = querySelector('#datepicker') as InputElement;
   uiList = querySelector('#todo-list') as DivElement;
   buttonClear = querySelector('#clear') as ButtonElement;
-  todoInput.onChange.listen(addTodo);
+  // todoInput.onChange.listen(addTodo);
 
   buttonClear.onClick.listen(removeAlltodos);
 

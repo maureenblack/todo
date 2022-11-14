@@ -16,19 +16,27 @@
   <h1 class="text-danger text-center">My ToDo List</h1>
   <div id="output">
     <!-- <label for ="todo">What do you want to do today?</label><br> -->
-    <form>
-    <input type ="text" id = "todo" placeholder="Enter To Do Item" required>
-      <div class="col-12 text-center">
+    <form class="row">
+      <div class="col-5">
+        <div>&nbsp;</div>
+        <input type ="text" id = "todo" placeholder="Enter To Do Item" required>
+      </div>
+      <div class="col-5">
         <label for="datepicker">Select Due date</label>
-        <input
+        <div>
+          <input
           class="datepicker"
           required
           type="datetime-local"
           id="datepicker"
           name="date"
-        />
+          />
+        </div>
       </div>
-      <button class="btn btn-danger">Add ToDo</button>
+      <div class="col-2">
+        <br>
+        <button class="btn btn-danger">Add ToDo</button>
+      </div>
     </form>
      <hr class="hr">
       <div id="todo-list">
