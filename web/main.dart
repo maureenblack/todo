@@ -1,7 +1,10 @@
+// ignore_for_file: unnecessary_new
+
 import 'dart:html';
 
 late DivElement doneUiList;
 late InputElement todoInput;
+late InputElement datepicker;
 late DivElement uiList;
 late ButtonElement buttonClear;
 List<Todo> todoList = [];
@@ -9,14 +12,15 @@ List<Todo> todoCompleteList = [];
 void main() async {
   doneUiList = querySelector('#done') as DivElement;
   todoInput = querySelector('#todo') as InputElement;
+  datepicker = querySelector('#datepicker') as InputElement;
   uiList = querySelector('#todo-list') as DivElement;
   buttonClear = querySelector('#clear') as ButtonElement;
   todoInput.onChange.listen(addTodo);
 
   buttonClear.onClick.listen(removeAlltodos);
 
-  Todo todo1 = new Todo("something");
-  Todo todo2 = new Todo("something 2");
+  Todo todo1 = new Todo("something", '');
+  Todo todo2 = new Todo("something 2", '');
 
   updateTodos(todo1);
   updateTodos(todo2);
@@ -26,7 +30,8 @@ void main() async {
 }
 
 void addTodo(Event event) {
-  Todo todo = Todo(todoInput.value.toString());
+  Todo todo = Todo(todoInput.value.toString(), datepicker.value.toString());
+  print(datepicker.value);
   todoList.add(todo);
   updateTodos(todo);
   todoInput.value = '';
@@ -50,7 +55,7 @@ void updateTodos(Todo todo) {
   });
   div.id = 'todo-$todoId';
   buttonRemove.text = 'X';
-  buttonRemove.className = "fas fa-trash-alt text-danger";
+  buttonRemove.className = "text-danger";
   doneButton.text = 'Done';
   doneButton.className = "text-success";
   doneButton.id = todo.id.toString();
@@ -66,7 +71,8 @@ void updateTodos(Todo todo) {
     inputAddTask.value = '';
   });
   String todoText = todo.text;
-  span.text = '$todoId $todoText';
+  String dueDate = todo.dueDate;
+  span.text = '$todoId $todoText ($dueDate)';
 
   div.children.add(doneButton);
   div.children.add(buttonEdit);
@@ -147,11 +153,11 @@ removeDone(String doneId) {
 
 class Todo {
   static int counter = 0;
-
+  final String dueDate;
   int id = 0;
   final String text;
   List<String> tasks = <String>[];
-  Todo(this.text) {
+  Todo(this.text, this.dueDate) {
     counter++;
     id = counter;
   }
