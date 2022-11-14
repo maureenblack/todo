@@ -13,6 +13,12 @@ html, body {
   text-align: center;
   max-width: 750px;
   margin: auto;
-
-
+  font-size: larger;
 }
+.container{
+ background-color: black;
+ color: aliceblue;
+ font-family: Montserrat;
+ font-weight: 600;
+}
+
