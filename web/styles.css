@@ -16,13 +16,14 @@ html, body {
   font-size: larger;
 }
 .hr{
-  background-color: brown;
-  
+  background-color: #dc3545;
 }
-.container{
- background-color: black;
+.container {
+ background-color: rgb(38, 4, 4);
  color: aliceblue;
  font-family: Montserrat;
- font-weight: 600;
+ font-weight: 800;
 }
-
+#article{
+  
+}
