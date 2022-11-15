@@ -223,6 +223,13 @@ void persist(String key, data) {
   window.localStorage['COUNTER'] = json.encode(Todo.counter);
 }
 
+class SubTask {
+  final String text;
+  final bool done;
+
+  SubTask(this.text, this.done);
+}
+
 class Todo {
   static int counter = 0;
   final String dueDate;
