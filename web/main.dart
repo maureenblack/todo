@@ -85,11 +85,11 @@ void updateTodos(Todo todo) {
   buttonRemove.text = 'X';
   buttonRemove.className = "btn btn-danger m-3";
   doneButton.text = 'Done';
-  doneButton.className = "btn btn-primary m-3";
+  doneButton.className = "btn btn-dark m-3";
   doneButton.id = todo.id.toString();
   buttonRemove.id = todo.id.toString();
   buttonEdit.text = 'Edit';
-  buttonEdit.className = "btn btn-primary m-3";
+  buttonEdit.className = "btn btn-dark m-3";
   buttonEdit.onClick.listen((event) => editTodo('todo-$todoId'));
   doneButton.onClick.listen((event) => todoDone('todo-$todoId'));
   buttonRemove.onClick.listen((event) => removeTodo('todo-$todoId'));
