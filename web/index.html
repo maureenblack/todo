@@ -13,7 +13,7 @@
 </head>
 <body>
   <div class="container col-9">
-  <h1 class="text-primary text-center">My ToDo List</h1>
+  <h1 class="text-danger text-center">My ToDo List</h1>
   <div id="output">
     <!-- <label for ="todo">What do you want to do today?</label><br> -->
     <form id="idp" class="row">
@@ -32,7 +32,7 @@
           name="date"
           />
           <select
-          class="btn border-warning p-2"
+          class="btn btn-danger p-2"
           required
           name="priority"
           id="priority">
@@ -45,21 +45,21 @@
         </div>
       <!-- </div> -->
       <div class="col-2">
-        <button class="btn btn-primary p-2">Add ToDo</button>
+        <button class="btn btn-danger p-2">Add ToDo</button>
       </div>
     </form>
      <hr class="hr" size="3px">
       <div id="todo-list">
       </div>
-      <button id = "clear" class="btn btn-primary text-center">Clear All ToDos</button>
+      <button id = "clear" class="btn btn-danger text-center">Clear All ToDos</button>
   </div>
 
     </div>
   <div class="container col-9">
-    <h1 class="text-primary text-center">Completed Tasks</h1><hr style="color: brown;">
+    <h1 class="text-danger text-center">Completed Tasks</h1><hr style="color: brown;">
     <div class="container" id="done">
     <div class="row">
-    <div class="col-9 text-primary">Task Name</div>
+    <div class="col-9 text-danger">Task Name</div>
     <div class="col-2 text-primary">ID</div>
 
     </div>
