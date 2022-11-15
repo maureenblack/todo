@@ -5,6 +5,7 @@ import 'dart:html';
 
 late DivElement doneUiList;
 late InputElement todoInput;
+late SelectElement priority;
 late InputElement datepicker;
 late DivElement uiList;
 late ButtonElement buttonClear;
@@ -20,6 +21,7 @@ void main() async {
   uiList = querySelector('#todo-list') as DivElement;
   buttonClear = querySelector('#clear') as ButtonElement;
   addTodoForm = querySelector('#idp') as FormElement;
+  priority = querySelector('#priority') as SelectElement;
 
   addTodoForm.onSubmit.listen((event) {
     event.preventDefault();
@@ -43,8 +45,8 @@ void main() async {
       updateTodos(todo);
       todoList.add(todo);
 
-      for (var taskName in todo.tasks) {
-        showTasks('todo-$todoId', taskName);
+      for (var subtask in todo.tasks) {
+        showTasks('todo-$todoId', subtask);
       }
     }
   }
@@ -70,7 +72,8 @@ void main() async {
 }
 
 void addTodo() {
-  Todo todo = Todo(todoInput.value.toString(), datepicker.value.toString());
+  Todo todo = Todo(todoInput.value.toString(), datepicker.value.toString(),
+      int.parse(priority.value.toString()));
   print(datepicker.value);
   todoList.add(todo);
   updateTodos(todo);
@@ -108,15 +111,29 @@ void updateTodos(Todo todo) {
   doneButton.onClick.listen((event) => todoDone('todo-$todoId'));
   buttonRemove.onClick.listen((event) => removeTodo('todo-$todoId'));
   inputAddTask.onChange.listen((event) {
-    todo.tasks.add(inputAddTask.value.toString());
-    showTasks('todo-$todoId', inputAddTask.value.toString());
+    String subtask = inputAddTask.value.toString();
+    todo.tasks.add(SubTask(subtask, false));
+    showTasks('todo-$todoId', SubTask(subtask, false));
     inputAddTask.value = '';
 
     persist('TODOS', todoList);
   });
   String todoText = todo.text;
   String dueDate = todo.dueDate;
-  span.text = '$todoId $todoText ($dueDate)';
+  String priorityLevel;
+
+  switch (todo.priority) {
+    case 1:
+      priorityLevel = 'Low';
+      break;
+    case 2:
+      priorityLevel = 'Medium';
+      break;
+    default:
+      priorityLevel = 'High';
+  }
+
+  span.text = '$todoId $todoText ($dueDate) $priorityLevel';
 
   div.children.add(doneButton);
   div.children.add(buttonEdit);
@@ -138,20 +155,67 @@ editTodo(String todoId) {
 
 void test(int id, Event event) {}
 
-void showTasks(String todoId, String taskName) {
+void showTasks(String todoId, SubTask subTask) {
   DivElement todoElement = querySelector('#$todoId') as DivElement;
   DivElement tasksList = todoElement.children[4] as DivElement;
   Element task = Element.div();
   ButtonElement deleteTask = ButtonElement();
   ButtonElement markDone = ButtonElement();
   SpanElement span = SpanElement();
-  span.text = taskName;
+
+  deleteTask.onClick.listen((event) {
+    if (window.confirm('Are you sure you want to delete this?')) {
+      tasksList.children.remove(task);
+      removeSubtaskFrom(todoId, subTask.text);
+    }
+  });
+
+  markDone.onClick.listen((event) {
+    span.style.textDecoration = subTask.done ? '' : 'line-through';
+    markDone.text = subTask.done ? 'Mark Done' : 'Mark Undone';
+    taskDone(todoId, subTask.text);
+  });
+
+  span.text = subTask.text;
   deleteTask.text = 'Delete';
-  markDone.text = 'Done';
+  markDone.text = subTask.done ? 'Mark Undone' : 'Mark Done';
+  span.style.textDecoration = subTask.done ? 'line-through' : '';
   task.children.add(deleteTask);
   task.children.add(markDone);
   task.children.add(span);
   tasksList.children.add(task);
+}
+
+void taskDone(String elementId, String subTask) {
+  String todoId;
+  // print(elementId);
+  todoList = todoList.map((todo) {
+    todoId = todo.id.toString();
+    if ('todo-$todoId' == elementId) {
+      todo.tasks = todo.tasks.map((element) {
+        element.done = element.text == subTask && !element.done;
+        return element;
+      }).toList();
+    }
+    return todo;
+  }).toList();
+
+  persist('TODOS', todoList);
+}
+
+void removeSubtaskFrom(String elementId, String subtask) {
+  String todoId;
+  // print(elementId);
+  todoList = todoList.map((todo) {
+    todoId = todo.id.toString();
+    if ('todo-$todoId' == elementId) {
+      todo.tasks =
+          todo.tasks.where((element) => element.text != subtask).toList();
+    }
+    return todo;
+  }).toList();
+
+  persist('TODOS', todoList);
 }
 
 Todo removeTodo(String todoId) {
@@ -225,18 +289,24 @@ void persist(String key, data) {
 
 class SubTask {
   final String text;
-  final bool done;
+  bool done;
 
   SubTask(this.text, this.done);
+  SubTask.fromJson(Map<String, dynamic> json)
+      : done = json['done'],
+        text = json['text'];
+
+  Map<String, dynamic> toJson() => {'done': done, 'text': text};
 }
 
 class Todo {
   static int counter = 0;
   final String dueDate;
+  final int priority;
   int id = 0;
   final String text;
-  List<String> tasks = <String>[];
-  Todo(this.text, this.dueDate) {
+  List<SubTask> tasks = <SubTask>[];
+  Todo(this.text, this.dueDate, this.priority) {
     counter++;
     id = counter;
   }
@@ -244,11 +314,19 @@ class Todo {
   Todo.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         text = json['text'],
-        tasks = (json['tasks'] as List).map((task) => task as String).toList(),
-        dueDate = json['dueDate'];
+        tasks = (json['tasks'] as List)
+            .map((subtask) => SubTask.fromJson(subtask))
+            .toList(),
+        dueDate = json['dueDate'],
+        priority = json['priority'];
 
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'text': text, 'dueDate': dueDate, 'tasks': tasks};
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'text': text,
+        'dueDate': dueDate,
+        'tasks': tasks,
+        'priority': priority
+      };
 }
 
 buildDeleteEdit(String id, String date) {
