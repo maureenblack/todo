@@ -83,13 +83,13 @@ void updateTodos(Todo todo) {
   });
   div.id = 'todo-$todoId';
   buttonRemove.text = 'X';
-  buttonRemove.className = "text-danger";
+  buttonRemove.className = "btn btn-danger m-3";
   doneButton.text = 'Done';
-  doneButton.className = "text-success";
+  doneButton.className = "btn btn-primary m-3";
   doneButton.id = todo.id.toString();
   buttonRemove.id = todo.id.toString();
   buttonEdit.text = 'Edit';
-  buttonEdit.className = "pencil";
+  buttonEdit.className = "btn btn-primary m-3";
   buttonEdit.onClick.listen((event) => editTodo('todo-$todoId'));
   doneButton.onClick.listen((event) => todoDone('todo-$todoId'));
   buttonRemove.onClick.listen((event) => removeTodo('todo-$todoId'));
@@ -179,7 +179,7 @@ void showDoneTodo(Todo todo, String todoId) {
   buttonDeleted.text = 'X';
 
   buttonDeleted.className = 'btn btn-danger col-1';
-
+  // doneButton.classsName = 'btn btn-danger';
   todoElement.children.add(todoNameElement);
   todoElement.children.add(todoIdElement);
   todoElement.children.add(buttonDeleted);
