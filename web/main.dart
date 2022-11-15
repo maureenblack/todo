@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_new
 
+import 'dart:convert';
 import 'dart:html';
 
 late DivElement doneUiList;
@@ -7,34 +8,61 @@ late InputElement todoInput;
 late InputElement datepicker;
 late DivElement uiList;
 late ButtonElement buttonClear;
+late FormElement addTodoForm;
 List<Todo> todoList = [];
 List<Todo> todoCompleteList = [];
+late JsonCodec json;
 void main() async {
+  json = JsonCodec();
   doneUiList = querySelector('#done') as DivElement;
   todoInput = querySelector('#todo') as InputElement;
   datepicker = querySelector('#datepicker') as InputElement;
   uiList = querySelector('#todo-list') as DivElement;
   buttonClear = querySelector('#clear') as ButtonElement;
-  // todoInput.onChange.listen(addTodo);
+  addTodoForm = querySelector('#idp') as FormElement;
+
+  addTodoForm.onSubmit.listen((event) {
+    event.preventDefault();
+    if (addTodoForm.checkValidity()) {
+      addTodo();
+    }
+  });
 
   buttonClear.onClick.listen(removeAlltodos);
+  String? counterJson = window.localStorage['COUNTER'];
+  String counter = counterJson ??
+      '0'; //EQUIVALENT TO (ternary operator): String counter = counterJson == null ? '0': counterJson;
+  Todo.counter = int.parse(counter);
 
-  Todo todo1 = new Todo("something", '');
-  Todo todo2 = new Todo("something 2", '');
+  final todosJson = window.localStorage['TODOS'];
+  if (todosJson != null) {
+    late List previousTodos = json.decode(todosJson);
+    for (var todoJson in previousTodos) {
+      updateTodos(Todo.fromJson(todoJson));
+      todoList.add(Todo.fromJson(todoJson));
+    }
+  }
 
-  updateTodos(todo1);
-  updateTodos(todo2);
-
-  todoList.add(todo1);
-  todoList.add(todo2);
+  final completeTodosJson = window.localStorage['COMPLETED'];
+  if (completeTodosJson != null) {
+    late List completedTodos = json.decode(completeTodosJson);
+    for (var todoJson in completedTodos) {
+      Todo todo = Todo.fromJson(todoJson);
+      String todoId = todo.id.toString();
+      showDoneTodo(todo, 'todo-$todoId');
+      todoCompleteList.add(todo);
+    }
+  }
 }
 
-void addTodo(Event event) {
+void addTodo() {
   Todo todo = Todo(todoInput.value.toString(), datepicker.value.toString());
   print(datepicker.value);
   todoList.add(todo);
   updateTodos(todo);
   todoInput.value = '';
+
+  persist('TODOS', todoList);
 }
 
 void updateTodos(Todo todo) {
@@ -110,12 +138,16 @@ Todo removeTodo(String todoId) {
 
   todoList.removeWhere((element) => element.id.toString() == elementId);
 
+  persist('TODOS', todoList);
+
   return todo;
 }
 
 void removeAlltodos(MouseEvent event) {
   uiList.children.clear();
   todoList.clear();
+
+  persist('TODOS', todoList);
 
   // print(todoList);
 }
@@ -124,6 +156,13 @@ void todoDone(String todoId) {
   Todo todo = removeTodo(todoId);
   todoCompleteList.add(todo);
 
+  showDoneTodo(todo, todoId);
+
+  persist('TODOS', todoList);
+  persist('COMPLETED', todoCompleteList);
+}
+
+void showDoneTodo(Todo todo, String todoId) {
   Element todoElement = Element.div();
   todoElement.className = 'row';
   todoElement.id = 'done_$todoId';
@@ -148,7 +187,16 @@ void todoDone(String todoId) {
 }
 
 removeDone(String doneId) {
+  late String elementId = doneId.split('-')[1];
+
   doneUiList.children.removeWhere((element) => element.id == doneId);
+  todoCompleteList.removeWhere((element) => element.id.toString() == elementId);
+  persist('COMPLETED', todoCompleteList);
+}
+
+void persist(String key, data) {
+  window.localStorage[key] = json.encode(data);
+  window.localStorage['COUNTER'] = json.encode(Todo.counter);
 }
 
 class Todo {
@@ -161,6 +209,13 @@ class Todo {
     counter++;
     id = counter;
   }
+
+  Todo.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        text = json['text'],
+        dueDate = json['dueDate'];
+
+  Map<String, dynamic> toJson() => {'id': id, 'text': text, 'dueDate': dueDate};
 }
 
 buildDeleteEdit(String id, String date) {
