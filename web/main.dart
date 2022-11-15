@@ -38,8 +38,14 @@ void main() async {
   if (todosJson != null) {
     late List previousTodos = json.decode(todosJson);
     for (var todoJson in previousTodos) {
-      updateTodos(Todo.fromJson(todoJson));
-      todoList.add(Todo.fromJson(todoJson));
+      Todo todo = Todo.fromJson(todoJson);
+      String todoId = todo.id.toString();
+      updateTodos(todo);
+      todoList.add(todo);
+
+      for (var taskName in todo.tasks) {
+        showTasks('todo-$todoId', taskName);
+      }
     }
   }
 
@@ -53,6 +59,14 @@ void main() async {
       todoCompleteList.add(todo);
     }
   }
+
+  // Todo todo = Todo('Todo', '2020');
+  // todo.tasks = ['no tasks', 'task x list'];
+  // updateTodos(todo);
+  // todoList.add(todo);
+  // String todoId = todo.id.toString();
+  // showTasks('todo-$todoId', 'no tasks');
+  // showTasks('todo-$todoId', 'task x list');
 }
 
 void addTodo() {
@@ -97,6 +111,8 @@ void updateTodos(Todo todo) {
     todo.tasks.add(inputAddTask.value.toString());
     showTasks('todo-$todoId', inputAddTask.value.toString());
     inputAddTask.value = '';
+
+    persist('TODOS', todoList);
   });
   String todoText = todo.text;
   String dueDate = todo.dueDate;
@@ -126,7 +142,15 @@ void showTasks(String todoId, String taskName) {
   DivElement todoElement = querySelector('#$todoId') as DivElement;
   DivElement tasksList = todoElement.children[4] as DivElement;
   Element task = Element.div();
-  task.text = taskName;
+  ButtonElement deleteTask = ButtonElement();
+  ButtonElement markDone = ButtonElement();
+  SpanElement span = SpanElement();
+  span.text = taskName;
+  deleteTask.text = 'Delete';
+  markDone.text = 'Done';
+  task.children.add(deleteTask);
+  task.children.add(markDone);
+  task.children.add(span);
   tasksList.children.add(task);
 }
 
@@ -213,9 +237,11 @@ class Todo {
   Todo.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         text = json['text'],
+        tasks = (json['tasks'] as List).map((task) => task as String).toList(),
         dueDate = json['dueDate'];
 
-  Map<String, dynamic> toJson() => {'id': id, 'text': text, 'dueDate': dueDate};
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'text': text, 'dueDate': dueDate, 'tasks': tasks};
 }
 
 buildDeleteEdit(String id, String date) {
