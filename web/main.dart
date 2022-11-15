@@ -94,6 +94,7 @@ void updateTodos(Todo todo) {
   InputElement checkbox = InputElement();
   ButtonElement buttonEdit = ButtonElement();
 
+  inputAddTask.placeholder = 'Enter sub-todo';
   checkbox.type = 'checkbox';
   checkbox.onChange.listen((event) {
     test(todo.id, event);
@@ -109,7 +110,11 @@ void updateTodos(Todo todo) {
   buttonEdit.className = "btn btn-dark m-3";
   buttonEdit.onClick.listen((event) => editTodo('todo-$todoId'));
   doneButton.onClick.listen((event) => todoDone('todo-$todoId'));
-  buttonRemove.onClick.listen((event) => removeTodo('todo-$todoId'));
+  buttonRemove.onClick.listen((event) {
+    if (window.confirm('Are you sure you want to delete this?')) {
+      removeTodo('todo-$todoId');
+    }
+  });
   inputAddTask.onChange.listen((event) {
     String subtask = inputAddTask.value.toString();
     todo.tasks.add(SubTask(subtask, false));
@@ -232,11 +237,12 @@ Todo removeTodo(String todoId) {
 }
 
 void removeAlltodos(MouseEvent event) {
-  uiList.children.clear();
-  todoList.clear();
+  if (window.confirm('Are you sure you want to clear all todos?')) {
+    uiList.children.clear();
+    todoList.clear();
 
-  persist('TODOS', todoList);
-
+    persist('TODOS', todoList);
+  }
   // print(todoList);
 }
 
@@ -263,7 +269,11 @@ void showDoneTodo(Todo todo, String todoId) {
   todoIdElement.text = todo.id.toString();
 
   Element buttonDeleted = ButtonElement();
-  buttonDeleted.onClick.listen((event) => removeDone('done_$todoId'));
+  buttonDeleted.onClick.listen((event) {
+    if (window.confirm('Are you sure you want to delete this?')) {
+      removeDone('done_$todoId');
+    }
+  });
   buttonDeleted.text = 'X';
 
   buttonDeleted.className = 'btn btn-danger col-1';
