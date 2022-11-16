@@ -20,12 +20,13 @@ html, body {
   
 }
 .container {
- background-color: rgb(79, 7, 79);
- color: aliceblue;
+ background-color:#042f5a;
+ color: #ffffff;
  font-family: Montserrat;
  font-weight: 1000;
  /* font-size: 80; */
 }
-#article{
-  
+.btn{
+  color: #ffffff;
+  background-color: purple;
 }

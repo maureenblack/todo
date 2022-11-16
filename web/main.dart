@@ -102,11 +102,11 @@ void updateTodos(Todo todo) {
   div.id = 'todo-$todoId';
   buttonRemove.text = 'X';
   buttonRemove.className = "btn btn-danger m-3";
-  doneButton.text = 'Done';
+  doneButton.innerHtml = '&#10004;';
   doneButton.className = "btn btn-dark m-3";
   doneButton.id = todo.id.toString();
   buttonRemove.id = todo.id.toString();
-  buttonEdit.text = 'Edit';
+  buttonEdit.innerHtml = '&#9998;';
   buttonEdit.className = "btn btn-dark m-3";
   buttonEdit.onClick.listen((event) => editTodo('todo-$todoId'));
   doneButton.onClick.listen((event) => todoDone('todo-$todoId'));
@@ -183,6 +183,8 @@ void showTasks(String todoId, SubTask subTask) {
 
   span.text = subTask.text;
   deleteTask.text = 'Delete';
+  deleteTask.className = 'btn btn-dark ';
+  markDone.className = 'btn btn-dark m-2';
   markDone.text = subTask.done ? 'Mark Undone' : 'Mark Done';
   span.style.textDecoration = subTask.done ? 'line-through' : '';
   task.children.add(deleteTask);
