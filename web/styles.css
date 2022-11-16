@@ -16,11 +16,12 @@ html, body {
   font-size: larger;
 }
 .hr{
-  background-color:#f3f5f9;
+  background-color:#f0f0f0;
+ 
   
 }
 .container {
- background-color:#042f5a;
+ background-color:rgb(69, 2, 39)  ;
  color: #ffffff;
  font-family: Montserrat;
  font-weight: 1000;
