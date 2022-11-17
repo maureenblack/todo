@@ -285,7 +285,6 @@ void showDoneTodo(Todo todo, String todoId) {
   todoElement.children.add(buttonDeleted);
   doneUiList.children.add(todoElement);
 }
-
 removeDone(String doneId) {
   late String elementId = doneId.split('-')[1];
 
