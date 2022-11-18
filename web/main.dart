@@ -101,13 +101,13 @@ void updateTodos(Todo todo) {
   });
   div.id = 'todo-$todoId';
   buttonRemove.text = 'X';
-  buttonRemove.className = "btn btn-outline-warning m-3";
+  buttonRemove.className = "btn btn-outline-primary m-3";
   doneButton.innerHtml = '&#10004;';
-  doneButton.className = "btn btn-outline-warning m-3";
+  doneButton.className = "btn btn-outline-primary m-3";
   doneButton.id = todo.id.toString();
   buttonRemove.id = todo.id.toString();
   buttonEdit.innerHtml = '&#9998;';
-  buttonEdit.className = "btn btn-outline-warning m-3";
+  buttonEdit.className = "btn btn-outline-primary m-3";
   buttonEdit.onClick.listen((event) => editTodo('todo-$todoId'));
   doneButton.onClick.listen((event) => todoDone('todo-$todoId'));
   buttonRemove.onClick.listen((event) {
@@ -183,8 +183,8 @@ void showTasks(String todoId, SubTask subTask) {
 
   span.text = subTask.text;
   deleteTask.text = 'Delete';
-  deleteTask.className = 'btn btn-outline-warning';
-  markDone.className = 'btn btn-outline-warning m-2';
+  deleteTask.className = 'btn btn-outline-primary';
+  markDone.className = 'btn btn-outline-primary m-2';
   markDone.text = subTask.done ? 'Mark Undone' : 'Mark Done';
   span.style.textDecoration = subTask.done ? 'line-through' : '';
   task.children.add(deleteTask);
@@ -278,7 +278,7 @@ void showDoneTodo(Todo todo, String todoId) {
   });
   buttonDeleted.text = 'X';
 
-  buttonDeleted.className = 'btn btn-outline-warning col-1';
+  buttonDeleted.className = 'btn btn-outline-primary col-1';
   // doneButton.classsName = 'btn btn-danger';
   todoElement.children.add(todoNameElement);
   todoElement.children.add(todoIdElement);

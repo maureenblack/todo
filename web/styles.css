@@ -21,7 +21,7 @@ html, body {
   
 }
 .container {
- background-color:#000000;
+ background-color:rgb(4, 1, 0);
  color: #ffffff;
  font-family: Montserrat;
  font-weight: 1000;
@@ -29,5 +29,5 @@ html, body {
 }
 .btn{
   color: #ffffff;
-  background-color: purple;
+  /* background-color: purple; */
 }
