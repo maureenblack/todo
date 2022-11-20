@@ -11,7 +11,7 @@ html, body {
 #output {
   padding: 20px;
   text-align: center;
-  max-width: 750px;
+  /* max-width: 750px; */
   margin: auto;
   font-size: larger;
 }
@@ -21,7 +21,7 @@ html, body {
   
 }
 .container {
- background-color:rgb(4, 1, 0);
+ background-color:rgb(190, 183, 180);
  color: #ffffff;
  font-family: Montserrat;
  font-weight: 1000;

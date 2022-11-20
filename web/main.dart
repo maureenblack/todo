@@ -8,7 +8,7 @@ late InputElement todoInput;
 late SelectElement priority;
 late SelectElement sortBySelect;
 late InputElement datepicker;
-late DivElement uiList;
+late TableSectionElement uiList;
 late ButtonElement buttonClear;
 late FormElement addTodoForm;
 List<Todo> todoList = [];
@@ -19,7 +19,7 @@ void main() async {
   doneUiList = querySelector('#done') as DivElement;
   todoInput = querySelector('#todo') as InputElement;
   datepicker = querySelector('#datepicker') as InputElement;
-  uiList = querySelector('#todo-list') as DivElement;
+  uiList = querySelector('#todo-list') as TableSectionElement;
   buttonClear = querySelector('#clear') as ButtonElement;
   addTodoForm = querySelector('#idp') as FormElement;
   priority = querySelector('#priority') as SelectElement;
@@ -138,23 +138,29 @@ void nameSort(List<Todo> todoList) {
 }
 
 void updateTodos(Todo todo) {
-  Element div = Element.div();
+  Element tr = Element.tr();
   ButtonElement buttonRemove = ButtonElement();
   InputElement inputAddTask = InputElement();
-  Element span = Element.span();
+  // Element td = Element.td();
   HRElement separator = HRElement();
   Element todoTasks = Element.div();
   String todoId = todo.id.toString();
   ButtonElement doneButton = ButtonElement();
   InputElement checkbox = InputElement();
   ButtonElement buttonEdit = ButtonElement();
+  Element tdName = Element.td();
+  Element tdDate = Element.td();
+  Element tdPriority = Element.td();
+  Element tdId = Element.td();
+  Element tdTask = Element.td();
+  Element tdActions = Element.td();
 
   inputAddTask.placeholder = 'Enter sub-todo';
   checkbox.type = 'checkbox';
   checkbox.onChange.listen((event) {
     test(todo.id, event);
   });
-  div.id = 'todo-$todoId';
+  tr.id = 'todo-$todoId';
   buttonRemove.text = 'X';
   buttonRemove.className = "btn btn-outline-primary m-3";
   doneButton.innerHtml = '&#10004;';
@@ -193,19 +199,27 @@ void updateTodos(Todo todo) {
       priorityLevel = 'High';
   }
 
-  span.text = '$todoId $todoText ($dueDate) $priorityLevel';
+  tdName.text = todoText;
+  tdDate.text = dueDate;
+  tdPriority.text = priorityLevel;
+  tdId.text = todoId;
+  tr.children.add(tdId);
+  tr.children.add(tdName);
+  tr.children.add(tdPriority);
+  tr.children.add(tdDate);
+  tr.children.add(tdTask);
+  tr.children.add(tdActions);
 
-  div.children.add(doneButton);
-  div.children.add(buttonEdit);
+  tdActions.children.add(doneButton);
+  tdActions.children.add(buttonEdit);
+  tdActions.children.add(buttonRemove);
+  // tr.children.add(tdName);
 
-  div.children.add(buttonRemove);
-  div.children.add(span);
+  tdTask.children.add(todoTasks);
+  tdTask.children.add(inputAddTask);
+  // tr.children.add(separator);
 
-  div.children.add(todoTasks);
-  div.children.add(inputAddTask);
-  div.children.add(separator);
-
-  uiList.children.add(div);
+  uiList.children.add(tr);
 }
 
 editTodo(String todoId) {
@@ -216,9 +230,9 @@ editTodo(String todoId) {
 void test(int id, Event event) {}
 
 void showTasks(String todoId, SubTask subTask) {
-  DivElement todoElement = querySelector('#$todoId') as DivElement;
-  DivElement tasksList = todoElement.children[4] as DivElement;
-  Element task = Element.div();
+  TableRowElement todoElement = querySelector('#$todoId') as TableRowElement;
+  TableCellElement tasksList = todoElement.children[4] as TableCellElement;
+  Element task = Element.li();
   ButtonElement deleteTask = ButtonElement();
   ButtonElement markDone = ButtonElement();
   SpanElement span = SpanElement();
@@ -242,9 +256,12 @@ void showTasks(String todoId, SubTask subTask) {
   markDone.className = 'btn btn-outline-primary m-2';
   markDone.text = subTask.done ? 'Mark Undone' : 'Mark Done';
   span.style.textDecoration = subTask.done ? 'line-through' : '';
+  task.children.add(span);
+  task.children.add(BRElement());
+
+  
   task.children.add(deleteTask);
   task.children.add(markDone);
-  task.children.add(span);
   tasksList.children.add(task);
 }
 
