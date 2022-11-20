@@ -6,6 +6,7 @@ import 'dart:html';
 late DivElement doneUiList;
 late InputElement todoInput;
 late SelectElement priority;
+late SelectElement sortBySelect;
 late InputElement datepicker;
 late DivElement uiList;
 late ButtonElement buttonClear;
@@ -22,6 +23,7 @@ void main() async {
   buttonClear = querySelector('#clear') as ButtonElement;
   addTodoForm = querySelector('#idp') as FormElement;
   priority = querySelector('#priority') as SelectElement;
+  sortBySelect = querySelector('#sortBy') as SelectElement;
 
   addTodoForm.onSubmit.listen((event) {
     event.preventDefault();
@@ -29,6 +31,29 @@ void main() async {
       addTodo();
     }
   });
+
+  OptionElement sortByPriority = OptionElement();
+  sortByPriority.value = 'Priority';
+  sortByPriority.selected = true;
+  sortByPriority.label = 'Priority';
+
+  OptionElement sortByDate = OptionElement();
+  sortByDate.value = 'Date';
+  sortByDate.selected = false;
+  sortByDate.label = 'Due Date';
+
+  OptionElement sortByName = OptionElement();
+  sortByName.value = 'Name';
+  sortByName.selected = false;
+  sortByName.label = 'Name';
+
+  sortBySelect.onChange.listen((event) {
+    sortBy(todoList, sortBySelect.value.toString());
+  });
+
+  sortBySelect.children.add(sortByPriority);
+  sortBySelect.children.add(sortByDate);
+  sortBySelect.children.add(sortByName);
 
   buttonClear.onClick.listen(removeAlltodos);
   String? counterJson = window.localStorage['COUNTER'];
@@ -38,17 +63,9 @@ void main() async {
 
   final todosJson = window.localStorage['TODOS'];
   if (todosJson != null) {
-    late List previousTodos = json.decode(todosJson);
-    for (var todoJson in previousTodos) {
-      Todo todo = Todo.fromJson(todoJson);
-      String todoId = todo.id.toString();
-      updateTodos(todo);
-      todoList.add(todo);
-
-      for (var subtask in todo.tasks) {
-        showTasks('todo-$todoId', subtask);
-      }
-    }
+    late List previousTodosJson = json.decode(todosJson);
+    todoList = previousTodosJson.map((todo) => Todo.fromJson(todo)).toList();
+    sortBy(todoList, null);
   }
 
   final completeTodosJson = window.localStorage['COMPLETED'];
@@ -80,6 +97,44 @@ void addTodo() {
   todoInput.value = '';
 
   persist('TODOS', todoList);
+}
+
+void sortBy(List<Todo> todoList, String? sortBy) {
+  switch (sortBy) {
+    case 'Date':
+      dateSort(todoList);
+      break;
+    case 'Name':
+      nameSort(todoList);
+      break;
+    default:
+      prioritySort(todoList);
+  }
+
+  todosClear();
+
+  for (var todo in todoList) {
+    String todoId = todo.id.toString();
+    updateTodos(todo);
+
+    for (var subtask in todo.tasks) {
+      showTasks('todo-$todoId', subtask);
+    }
+  }
+  // persist('SORT_BY', sortBy);
+}
+
+void prioritySort(List<Todo> todoList) {
+  todoList.sort((a, b) => b.priority.compareTo(a.priority));
+}
+
+void dateSort(List<Todo> todoList) {
+  todoList.sort(
+      (a, b) => DateTime.parse(a.dueDate).compareTo(DateTime.parse(b.dueDate)));
+}
+
+void nameSort(List<Todo> todoList) {
+  todoList.sort((a, b) => a.text.compareTo(b.text));
 }
 
 void updateTodos(Todo todo) {
@@ -238,9 +293,13 @@ Todo removeTodo(String todoId) {
   return todo;
 }
 
-void removeAlltodos(MouseEvent event) {
+void todosClear() {
+  uiList.children.clear();
+}
+
+void removeAlltodos(MouseEvent? event) {
   if (window.confirm('Are you sure you want to clear all todos?')) {
-    uiList.children.clear();
+    todosClear();
     todoList.clear();
 
     persist('TODOS', todoList);
@@ -285,6 +344,7 @@ void showDoneTodo(Todo todo, String todoId) {
   todoElement.children.add(buttonDeleted);
   doneUiList.children.add(todoElement);
 }
+
 removeDone(String doneId) {
   late String elementId = doneId.split('-')[1];
 
