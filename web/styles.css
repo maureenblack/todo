@@ -1,5 +1,42 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
+/*add responsiveness to app */
+@media only screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 70px;
+  font-weight: 300;
+  color: rgb(79, 13, 13);
+  text-align: center;
+  margin: 0 0 40px;
+}
+.title{
+  padding: 0 16px;
+  /* background-color: #01050a; */
+  color: rgb(79, 13, 13);
+  
+}
+.header {
+  overflow: hidden;
+  background-color: #3c0707;
+  padding: 20px 10px;
+  color: #fff3f3;
+}
+#text-danger{
+  color: #fff3f3;
+}
+/* style the text-danger class */
+
+
+@media (max-width: 600px) {
+  .container {
+    width: 100%;
+    margin: 0;
+}
 html, body {
   width: 100%;
   height: 100%;
@@ -15,19 +52,43 @@ html, body {
   margin: auto;
   font-size: larger;
 }
-.hr{
-  background-color:#f0f0f0;
- 
+
   
 }
 .container {
- background-color:rgb(190, 183, 180);
+ background-color:#565654;
  color: #ffffff;
  font-family: Montserrat;
  font-weight: 1000;
- /* font-size: 80; */
 }
-.btn{
-  color: #ffffff;
-  /* background-color: purple; */
+
+
+.btn-secondary {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-light {
+  color: #212529;
+  border-color: #f8f9fa;
+}
+
+/* change button colors */
+.btn-dark {
+  color: #fff;
+  background-color: #343a40;
+}
+.table{
+  background-color: #fffad3;
+  color: #e7dddd;
+  font-family: Montserrat;
+  font-weight: 1000;
+}
+body{
+  background-color: #fffad3;
+  color: #f9f4f4;
+  font-family: Montserrat;
+  font-weight: 1000;
+  
 }
