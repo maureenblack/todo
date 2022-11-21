@@ -13,16 +13,15 @@
 </head>
 <body class="container col-9">
   
-  <h1 class="header text-center">My ToDo List</h1>
+  <h1 class="header title">My Todo List</h1>
   <div id="output">
     <form id="idp" class="row">
       <div class="col-4">
         <div>&nbsp;</div>
-        <input type ="text" id = "todo" placeholder="Enter To Do Item" required>
+        <input type ="text" id = "todo" placeholder="Enter To do Item" required>
       </div>
       <div class="col-5 text-secondary">
-        <label for="datepicker">Select Due date</label>
-        <div>
+        <div class="items">
           <input
           class="datepicker"
           required
@@ -31,7 +30,7 @@
           name="date"
           />
           <select
-          class="btn btn-secondary p-2"
+          class="btn btn-secondary btn-secondary-overwrite p-2"
           required
           name="priority"
           id="priority">
@@ -42,7 +41,7 @@
       </div>
         </div>
       <div class="col-3 text-right">
-        <button class="btn btn-secondary">&#10010; Add ToDo</button>
+        <button class="btn btn-secondary btn-secondary-overwrite"> Add Todo</button>
       </div>
     </form>
     <div class="row">
@@ -51,7 +50,7 @@
       </div>
 
      <select
-     class="btn btn-secondary "
+     class="btn btn-secondary  btn-secondary-overwrite"
      required
      name="sortBy"
      id="sortBy">
@@ -61,7 +60,7 @@
        <thead>
         <tr class="text-secondary">
           
-          <th>ID</th>
+          <!-- <th>ID</th> -->
           <th>Name</th>
           <th>Priority</th>
           <th>Due Date</th>
@@ -74,16 +73,15 @@
       </table>
       <div id="todo-lis">
       </div>
-      <button id = "clear" class="btn btn-secondary text-center">Clear All ToDos</button>
+      <button id = "clear" class="btn btn-secondary  btn-secondary-overwrite text-center">Clear All ToDos</button>
   </div>
     </div>
   <div class="container col-9">
-    <h1 class="text-white">Completed Tasks</h1><hr>
+    <h1 class="h1">Completed Tasks</h1><hr>
     <div class="container" id="done">
     <div class="row text-secondary">
     <div class=" title col-9 ">Task Name</b></div>
     <div class=" title col-2 ">ID</div>
-    <!-- add respon-->
 
   </div>
     </div>

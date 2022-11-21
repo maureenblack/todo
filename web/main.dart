@@ -157,6 +157,7 @@ void updateTodos(Todo todo) {
   Element tdActions = Element.td();
 
   inputAddTask.placeholder = 'Enter sub-todo';
+  inputAddTask.type = 'text';
   checkbox.type = 'checkbox';
   checkbox.onChange.listen((event) {
     test(todo.id, event);
@@ -204,7 +205,7 @@ void updateTodos(Todo todo) {
   tdDate.text = dueDate;
   tdPriority.text = priorityLevel;
   tdId.text = todoId;
-  tr.children.add(tdId);
+  // tr.children.add(tdId);
   tr.children.add(tdName);
   tr.children.add(tdPriority);
   tr.children.add(tdDate);
